@@ -1,0 +1,25 @@
+#!/bin/bash
+
+function cursorBack() {
+  echo -en "\033[$1D"
+  # Mac compatible, but goes back to first column always. See comments
+  echo -en "\r"
+}
+
+function wait_dial() {
+    local duration=$1
+    local spin='⣾⣽⣻⢿⡿⣟⣯⣷'
+    #local spin='◐◓◑◒'
+    local charwidth=3
+
+    local end_time=$((SECONDS + duration))
+
+    while [ $SECONDS -lt $end_time ]; do
+        local i=$(((i + $charwidth) % ${#spin}))
+    printf "%s" "${spin:$i:$charwidth}"
+
+    cursorBack 1
+    sleep .3
+  done
+
+}

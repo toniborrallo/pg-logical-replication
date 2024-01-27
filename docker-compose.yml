@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+ pg-master:
+   build:
+     context: ./master
+   networks:
+     - pg-net
+   ports:
+     - "15432:5432"
+   environment:
+     - POSTGRES_PASSWORD=password
+     - POSTGRES_DB=postgres
+
+ pg-replica:
+   build:
+     context: ./replica
+   networks:
+     - pg-net
+   ports:
+     - "25432:5432"
+   environment:
+     - POSTGRES_PASSWORD=password
+     - POSTGRES_DB=postgres
+
+networks:
+ pg-net:
+   driver: bridge
