@@ -1,10 +1,10 @@
-Introduction 
+# Introduction 
 
 The main difference between the logical and physical replication (already implemented for the current replica, for example), is that physical replication works at the level of data blocks. Changes made to the primary database are copied directly as data blocks to the secondary database. In the other hand, Logical replication works at the row or even SQL statement level. Changes made to the primary database are replicated as SQL statements or row-level changes. PostgreSQL supports both mechanisms concurrently.
 
 The logical replication provides greater flexibility by allowing you to select which specific tables or data should be replicated. It also allows transformations to be performed during replication. To apply WHERE condition for replicating data is only available from version 15 and above, we're currently in 14.7, so at this moment we only can specify the list of tables to be replicated. 
 
-How it works in a nutshell: 
+## How it works in a nutshell: 
 
 In the source database (publisher), we have to create publications for every table (or set of tables) to be replicated. In the target database (subscriber), we need to create a subscription to those publications to start replication for the published tables. 
 
@@ -22,13 +22,13 @@ Only regular tables can be published, we cannot replicate to a view.
 
 When a subscription table is dropped and recreated, the synchronization information is lost. This means that the data has to be resynchronized afterwards.
 
-Requisites:
+## Requisites:
 
 Postgres version: logical replication is supported in the current version 14.7, but with not WHERE condition allowed. From version 15, we can add table selection and WHERE condition in logical replication, this conditional filtering makes the difference when the xid field will be implemented in the database. 
 
 WAL level: For logical replication we need wal_level = logical, the sentence SHOW wal_level; outputs the current detail WAL level. In production database currently we have wal_level=replica. This isn't enough for logical replication, so we need to change the RDS parameter rds.logical_replication = 1 (this require a database restart!!!) 
 
-Examples:
+## Examples:
 
 We have created a Master Postgres DB (version 14.7 to be fully compatible with the current versions in Greyfinch, but we can do a replication between different version of postgres, e.g. 15 -> 14.7 or 14.7 -> 15). 
 
